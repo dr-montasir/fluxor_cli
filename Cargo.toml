@@ -1,6 +1,6 @@
 [package]
 name = "fluxor_cli"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Montasir Mirghani <me@montasir.site>"]
 edition = "2024"
 description = "Fluxor CLI: a command-line tool that allows developers to quickly and efficiently create project starters for the Fluxor web framework."
@@ -14,5 +14,9 @@ exclude = ["Cargo.lock", "DEV-INFO.md"]
 
 [dependencies]
 cargo_metadata = "0.19.2"
-clap = { version = "4.5.32", features = ["derive"] }
+clap = { version = "4.5.38", features = ["derive"] }
 regex = "1.11.1"
+
+[[bin]]
+name = "fluxor"
+path = "src/main.rs"
