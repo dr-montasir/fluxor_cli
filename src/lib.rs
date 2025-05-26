@@ -2,6 +2,7 @@
 #![doc = r"<div align='center'><a href='https://github.com/dr-montasir/fluxor_cli' target='_blank'><img src='https://github.com/dr-montasir/fluxor_cli/raw/HEAD/fluxor-icon-64x64.svg' alt='Fluxor CLI' width='80' height='auto' /></a><br><br><a href='https://github.com/dr-montasir/fluxor_cli' target='_blank'>FLUXOR</a><br><br>Fluxor_cli is the command-line interface for the Fluxor web framework, enabling rapid project scaffolding and management for Rust applications focused on data science and computing.</div>"]
 
 pub mod hello_world;
+pub mod routes;
 
 pub use clap::Parser;
 use regex::Regex;
@@ -100,6 +101,8 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
         "helloworld" => hello_world::hello_world_cargo_toml(name, &fluxor_version),
         "helloworld-api" => hello_world::hello_world_cargo_toml(name, &fluxor_version),
         "helloworld-api-server" => hello_world::hello_world_api_server_cargo_toml(name, &fluxor_version),
+        // Routes Examples
+        "routes" => routes::routes_cargo_toml(name, &fluxor_version),
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
@@ -115,6 +118,7 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
 
     // Create main.rs based on the specified example
     match example {
+        // Hello World Examples
         "helloworld" => {
             hello_world::hello_world_template(&src_path);
         }
@@ -123,6 +127,10 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
         }
         "helloworld-api-server" => {
             hello_world::hello_world_api_server_template(&src_path);
+        }
+        // Routes Examples
+        "routes" => {
+            routes::routes_template(&src_path);
         }
         _ => {
             eprintln!("Unknown example specified: {}", example);

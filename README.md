@@ -66,6 +66,24 @@ cargo run
 
 The application should start on http://127.0.0.1:8080.
 
+## All Examples
+
+### Hello World
+- helloworld
+- helloworld-api
+- helloworld-api-server
+
+### Routes
+- routes
+
+Use the example name after the flag --example (e.g., `helloworld`):
+
+```terminal
+fluxor new my_project --version latest --example helloworld
+
+fluxor new my_app --version latest --example routes
+```
+
 ## Documentation
 For more detailed usage and advanced features, refer to the [fluxor](https://docs.rs/fluxor/latest/fluxor/) & [fluxor_cli](https://docs.rs/fluxor_cli/latest/fluxor_cli/) documentations.
 

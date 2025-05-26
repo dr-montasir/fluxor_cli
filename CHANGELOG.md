@@ -1,3 +1,7 @@
+## v0.4.0
+
+- Added routes example.
+
 ## v0.3.0
 
 - Used command **fluxor** instead of **fluxor_cli**.
