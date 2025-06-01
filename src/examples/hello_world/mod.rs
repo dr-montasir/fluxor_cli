@@ -1,7 +1,10 @@
 use std::fs;
 use std::path::Path;
 
+use crate::utils::to_crate_name;
+
 pub fn hello_world_cargo_toml(name: &str, fluxor_version:  &str) -> String {
+    let crate_name = to_crate_name(name);
     format!(
             r#"[package]
 name = "{}"
@@ -11,13 +14,15 @@ edition = "2024"
 [dependencies]
 fluxor = "{}"
 "#,
-            name, fluxor_version // Using `name` here to set the package name
+            crate_name, fluxor_version // Using `name` here to set the package name
         )
 }
 
-pub fn hello_world_template(src_path:  &Path) {
+// src/main.rs
+
+pub fn hello_world_main_rs(path:  &Path) {
     fs::write(
-        src_path.join("main.rs"),
+        path.join("main.rs"),
         r#"use fluxor::prelude::*;
 
 fn hello(_req: Req, _params: Params) -> Reply {
@@ -40,9 +45,11 @@ async fn main() {
     .expect("Failed to create main.rs for helloworld");
 }
 
-pub fn hello_world_api_template(src_path:  &Path) {
+// src/main.rs
+
+pub fn hello_world_api_main_rs(path:  &Path) {
     fs::write(
-        src_path.join("main.rs"),
+        path.join("main.rs"),
         r##"use fluxor::prelude::*;
 
 fn hello(_req: Req, _params: Params) -> Reply {
@@ -69,6 +76,7 @@ async fn main() {
 }
 
 pub fn hello_world_api_server_cargo_toml(name: &str, fluxor_version:  &str) -> String {
+    let crate_name = to_crate_name(name);
     format!(
             r#"[package]
 name = "{}"
@@ -82,13 +90,15 @@ fluxor = "{}"
 name = "server"
 path = "src/server.rs"
 "#,
-            name, fluxor_version // Use `name` here to set the package name
+            crate_name, fluxor_version // Use `name` here to set the package name
         )
 }
 
-pub fn hello_world_api_server_template(src_path:  &Path) {
+// src/server.rs
+
+pub fn hello_world_api_server_rs(path:  &Path) {
     fs::write(
-        src_path.join("server.rs"),
+        path.join("server.rs"),
         r##"use fluxor::prelude::*;
 
 fn hello(_req: Req, _params: Params) -> Reply {

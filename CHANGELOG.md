@@ -1,3 +1,9 @@
+## v0.5.0
+
+- Added routes-project example.
+- Updated clap version (v4.5.38 -> v4.5.39).
+- Updated cargo_metadata version (v0.19.2 -> v0.20.0).
+
 ## v0.4.0
 
 - Added routes example.
