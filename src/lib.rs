@@ -108,6 +108,8 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
         // Routes Examples
         "routes" => routes::routes_cargo_toml(&crate_name, &fluxor_version),
         "routes-project" => routes::routes_cargo_toml(&crate_name, &fluxor_version),
+        // Assets Examples
+        "assets" => assets::assets_cargo_toml(&crate_name, &fluxor_version),
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
@@ -170,6 +172,24 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
             routes::routes_project_routes_pages_home_rs(&src_routes_pages_path);
             // src/routes/pages/about.rs
             routes::routes_project_routes_pages_about_rs(&src_routes_pages_path);
+        }
+        // Assets Examples
+        "assets" => {
+            // main.rs
+            assets::assets_main_rs(&src_path);
+
+            // assets
+            let assets_img_path = project_path.join("assets/img");
+            let assets_css_path = project_path.join("assets/css");
+            let assets_js_path = project_path.join("assets/js");
+            
+            fs::create_dir_all(&assets_img_path).expect("Failed to create sassets/img directory");
+            fs::create_dir_all(&assets_css_path).expect("Failed to create sassets/css directory");
+            fs::create_dir_all(&assets_js_path).expect("Failed to create sassets/js directory");
+            
+            assets::assets_img_fluxor_svg(&assets_img_path);
+            assets::assets_css_styels_css(&assets_css_path);
+            assets::assets_js_script_js(&assets_js_path);
         }
         _ => {
             eprintln!("Unknown example specified: {}", example);
