@@ -1,7 +1,17 @@
 use std::fs;
 use std::path::Path;
 
+use crate::metadata::*;
 use crate::utils::to_crate_name;
+
+// metadata files
+
+pub fn config_metadata(path: &Path) {
+  // .gitignore
+  let gitignore_content = r#"/target
+    "#;
+  create_gitignore(path, gitignore_content);
+}
 
 // Cargo.toml
 
@@ -199,4 +209,3 @@ pub fn assets_img_fluxor_svg(path: &Path) {
     fs::write(path.join("fluxor.svg"), content)
         .expect("Failed to create assets/img/fluxor.svg for assets example");
 }
-

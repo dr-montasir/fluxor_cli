@@ -1,3 +1,9 @@
+## v0.7.0
+
+- Added the metadata module.
+- Modified all example.
+- Added a dotenv example.
+
 ## v0.6.1
 
 - Modified assets example.

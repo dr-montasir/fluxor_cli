@@ -2,6 +2,7 @@
 #![doc = r"<div align='center'><a href='https://github.com/dr-montasir/fluxor_cli' target='_blank'><img src='https://github.com/dr-montasir/fluxor_cli/raw/HEAD/fluxor-icon-64x64.svg' alt='Fluxor CLI' width='80' height='auto' /></a><br><br><a href='https://github.com/dr-montasir/fluxor_cli' target='_blank'>FLUXOR</a><br><br>Fluxor_cli is the command-line interface for the Fluxor web framework, enabling rapid project scaffolding and management for Rust applications focused on data science and computing.</div>"]
 
 pub mod utils;
+pub mod metadata;
 mod examples;
 
 pub use clap::Parser;
@@ -83,21 +84,8 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
         version.to_string()
     };
 
-    // Create .gitignore file
-    let gitignore = r#"/target
-    "#;
-       
-    fs::write(project_path.join(".gitignore"), gitignore)
-        .expect("Failed to create .gitignore");
-
-    // Create .gitignore file
-    let readme = format!(r#"# {}
-
-This project has been initialized with the assistance of the [Fluxor CLI](https://crates.io/crates/fluxor_cli), a command-line tool that allows developers to quickly and efficiently create project starters for the [Fluxor web framework](https://crates.io/crates/fluxor)."
-"#, crate_name);
-        
-    fs::write(project_path.join("README.md"), readme)
-        .expect("Failed to create readme file");
+    // create README.md
+    metadata::create_readme(project_path, &crate_name);
 
     // Create Cargo.toml specific for the example
     let cargo_toml = match example {
@@ -110,6 +98,8 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
         "routes-project" => routes::routes_cargo_toml(&crate_name, &fluxor_version),
         // Assets Examples
         "assets" => assets::assets_cargo_toml(&crate_name, &fluxor_version),
+        // DotEnv Examples
+        "dotenv" => dotenv::dotenv_cargo_toml(&crate_name, &fluxor_version),
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
@@ -127,19 +117,38 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
     match example {
         // Hello World Examples
         "helloworld" => {
+            // metadata files
+            hello_world::config_metadata(&project_path);
+
+            // src/main.rs
             hello_world::hello_world_main_rs(&src_path);
         }
         "helloworld-api" => {
+            // metadata files
+            hello_world::config_metadata(&project_path);
+
+            // src/main.rs
             hello_world::hello_world_api_main_rs(&src_path);
         }
         "helloworld-api-server" => {
+            // metadata files
+            hello_world::config_metadata(&project_path);
+
+            // src/server.rs
             hello_world::hello_world_api_server_rs(&src_path);
         }
         // Routes Examples
         "routes" => {
+            // metadata files
+            routes::config_metadata(&project_path);
+
+            // src/main.rs
             routes::routes_main_rs(&src_path);
         }
         "routes-project" => {
+            // metadata files
+            routes::config_metadata(&project_path);
+
             // src
             // src/main.rs
             routes::routes_project_main_rs(&crate_name, &src_path);
@@ -175,6 +184,9 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
         }
         // Assets Examples
         "assets" => {
+            // metadata files
+            assets::config_metadata(&project_path);
+
             // main.rs
             assets::assets_main_rs(&src_path);
 
@@ -190,6 +202,14 @@ This project has been initialized with the assistance of the [Fluxor CLI](https:
             assets::assets_img_fluxor_svg(&assets_img_path);
             assets::assets_css_styels_css(&assets_css_path);
             assets::assets_js_script_js(&assets_js_path);
+        }
+        // DotEnv Examples
+        "dotenv" => {
+            // metadata files
+            dotenv::config_metadata(&project_path);
+
+            // main.rs
+            dotenv::dotenv_main_rs(&src_path);
         }
         _ => {
             eprintln!("Unknown example specified: {}", example);
