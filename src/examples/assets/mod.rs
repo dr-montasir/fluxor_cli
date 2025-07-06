@@ -23,8 +23,7 @@ fluxor = "{}"
 pub fn assets_main_rs(path: &Path) {
     let content = r##"use fluxor::prelude::*;
 
-const HTML: &str = r#"
-<!DOCTYPE html>
+const HTML: &str = r#"<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -33,12 +32,14 @@ const HTML: &str = r#"
         <title>Assets Example</title>
     </head>
     <body>
-        <h1>Static files example 👋</h1>
+        <h1>
+            <span class="hand">👋</span>
+            <span class="animated-text" id="animatedText">&ensp;from&nbsp;the&nbsp;fluxor&nbsp;framework&ensp;</span>
+        </h1>
         <img id="fluxor" src="/img/fluxor.svg" alt="Fluxor logo" />
         <script src="/js/script.js"></script>
     </body>
-</html>
-"#;
+</html>"#;
 
 fn home(_req: Req, _params: Params) -> Reply {
     boxed(async {
@@ -96,6 +97,42 @@ pub fn assets_css_styels_css(path: &Path) {
     width: 300px;
     height: 300px;
   }
+}
+
+.hand {
+  display: inline-block;
+  font-size: 2em;
+  margin-left: 10px;
+  animation: wave-hand 2s infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave-hand {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(20deg); }
+  40% { transform: rotate(-20deg); }
+  60% { transform: rotate(20deg); }
+  80% { transform: rotate(-20deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animated-text span {
+  border: 10px solid inherit;
+  background-color: #61DAFB;
+  color: #FF6D00;
+  opacity: 0;
+  display: inline-block;
+  animation: fadeIn 9s infinite;
+  border-radius: 25%;
+  font-weight:bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }"#;
 
     fs::write(path.join("styles.css"), content)
@@ -127,6 +164,22 @@ pub fn assets_js_script_js(path: &Path) {
     fluxor.style.width = size + 'px';
     fluxor.style.height = size + 'px';
   }, 100);
+
+  const textContainer = document.getElementById('animatedText');
+  const text = textContainer.textContent;
+  textContainer.textContent = '';
+
+  for (let i = 0; i < text.length; i++) {
+    const span = document.createElement('span');
+    span.textContent = text[i];
+    span.style.animationDelay = `${i * 0.2}s`;
+    textContainer.appendChild(span);
+  }
+
+  const spans = textContainer.querySelectorAll('span');
+  spans.forEach(span => {
+    span.style.animationName = 'fadeIn';
+  });
 };"#;
 
     fs::write(path.join("script.js"), content)

@@ -1,3 +1,12 @@
+## v0.6.1
+
+- Modified assets example.
+- Updated clap version (v4.5.39 -> v4.5.40).
+
+## v0.6.0
+
+- Added assets example.
+
 ## v0.5.0
 
 - Added routes-project example.
