@@ -1,3 +1,7 @@
+## v0.7.1
+
+- Added: cans-template-engine example.
+
 ## v0.7.0
 
 - Added the metadata module.

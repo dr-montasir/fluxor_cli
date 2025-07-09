@@ -97,6 +97,9 @@ The application should start on http://127.0.0.1:8080.
 ### DotEnv
 - dotenv
 
+### Cans
+- cans-template-engine
+
 Use the example name after the flag --example (e.g., `helloworld`):
 
 ```terminal
@@ -109,6 +112,8 @@ fluxor new routes_app --version latest --example routes-project
 fluxor new assets_example --version latest --example assets
 
 fluxor new dotenv_example --version latest --example dotenv
+
+fluxor new template_app --version latest --example cans-template-engine
 ```
 
 ## Documentation

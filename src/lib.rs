@@ -100,6 +100,7 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
         "assets" => assets::assets_cargo_toml(&crate_name, &fluxor_version),
         // DotEnv Examples
         "dotenv" => dotenv::dotenv_cargo_toml(&crate_name, &fluxor_version),
+        "cans-template-engine" => cans::template_cargo_toml(&crate_name, &fluxor_version),
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
@@ -210,6 +211,15 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
 
             // main.rs
             dotenv::dotenv_main_rs(&src_path);
+        }
+        // Cans:
+        // Template Examples
+        "cans-template-engine" => {
+            // metadata files
+            cans::config_metadata(&project_path);
+
+            // main.rs
+            cans::template_main_rs(&src_path);
         }
         _ => {
             eprintln!("Unknown example specified: {}", example);
