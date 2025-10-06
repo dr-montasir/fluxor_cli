@@ -75,10 +75,10 @@ fn api_message(_req: Req, _params: Params) -> Reply {
 
 // Define the function to set up routes
 fn setup_routes(app: &mut Fluxor) {
-    app.route("/", GET, home);                // Set the home route.
-    app.route("/about", GET, about);          // Set the about route.
-    app.route("/api/msg", POST, api_message); // Set the api message route.
-    app.route("/http-client", GET, serve_http_client); // A simple http client to test your application.
+    app.route(GET, "/", home);                // Set the home route.
+    app.route(GET, "/about", about);          // Set the about route.
+    app.route(POST, "/api/msg", api_message); // Set the api message route.
+    app.route(GET, "/http-client", serve_http_client); // A simple http client to test your application.
 }
 
 #[tokio::main]
@@ -138,10 +138,10 @@ mod api;
 
 // Define the function to set up routes
 pub fn setup_routes(app: &mut Fluxor) {
-    app.route("/", GET, pages::home::home);             // Set the home route.
-    app.route("/about", GET, pages::about::about);      // Set the about route.
-    app.route("/api/msg", POST, api::msg::api_message); // Set the api message route.
-    app.route("/http-client", GET, serve_http_client);  // A simple http client to test your application.
+    app.route(GET, "/", pages::home::home);             // Set the home route.
+    app.route(GET, "/about", pages::about::about);      // Set the about route.
+    app.route(POST, "/api/msg", api::msg::api_message); // Set the api message route.
+    app.route(GET, "/http-client", serve_http_client);  // A simple http client to test your application.
 }"#;
 
     fs::write(path.join("mod.rs"), content)

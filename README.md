@@ -36,6 +36,8 @@
 
 **Fluxor CLI** is the command-line interface for the Fluxor web framework, enabling rapid project scaffolding and management for Rust applications focused on data science and computing.
 
+<a href="https://github.com/dr-montasir/fluxor_cli/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">SEE CHANGELOG</a>
+
 ## Features
 
 - **Project Scaffolding**: Quickly create new Fluxor projects with pre-configured templates.

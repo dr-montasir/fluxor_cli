@@ -1,3 +1,15 @@
+## v0.8.0
+
+- Functions changed:
+    - Started from version 0.8.0:
+        - The order of parameters in the route function has been updated from (path, method, handler) to (method, path, handler).
+        - This change improves code readability and consistency by placing the HTTP method first, aligning with common conventions and making it easier to group related methods together for clarity.
+- Crates updated:
+    - cargo_metadata (v0.20.0 -> v0.23.0).
+    - clap (v4.5.40 -> v4.5.48).
+    - regex (v1.11.1 -> v1.11.3).
+- Added the structure of the db project example.
+
 ## v0.7.1
 
 - Added: cans-template-engine example.

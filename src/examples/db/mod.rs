@@ -6,7 +6,7 @@ use crate::utils::to_crate_name;
 
 // metadata files
 
-pub fn config_metadata(path: &Path) {
+pub fn config_redis_metadata(path: &Path) {
   // .gitignore
   let gitignore_content = r#"# Folders
 /target
@@ -29,7 +29,7 @@ PORT=8080
 
 // Cargo.toml
 
-pub fn dotenv_cargo_toml(name: &str, fluxor_version:  &str) -> String {
+pub fn db_cargo_toml(name: &str, fluxor_version:  &str) -> String {
     let crate_name = to_crate_name(name);
     format!(
             r#"[package]
@@ -46,7 +46,7 @@ fluxor = "{}"
 
 // main.rs
 
-pub fn dotenv_main_rs(path: &Path) {
+pub fn db_redis_main_rs(path: &Path) {
     let content = r##"use fluxor::prelude::*;
 
 fn index(_req: Req, _params: Params) -> Reply {
@@ -82,5 +82,5 @@ async fn main() {
 "##;
 
     fs::write(path.join("main.rs"), content)
-        .expect("Failed to create src/main.rs for dotenv example");
+        .expect("Failed to create src/main.rs for db-redis example");
 }

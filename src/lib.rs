@@ -101,6 +101,8 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
         // DotEnv Examples
         "dotenv" => dotenv::dotenv_cargo_toml(&crate_name, &fluxor_version),
         "cans-template-engine" => cans::template_cargo_toml(&crate_name, &fluxor_version),
+        // DB
+        "db-redis" => db::db_cargo_toml(&crate_name, &fluxor_version),
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
@@ -220,6 +222,15 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
 
             // main.rs
             cans::template_main_rs(&src_path);
+        }
+        // DB
+        // REDIS DB
+        "db-redis" => {
+            // metadata files
+            db::config_redis_metadata(&project_path);
+
+            // main.rs
+            db::db_redis_main_rs(&src_path);
         }
         _ => {
             eprintln!("Unknown example specified: {}", example);

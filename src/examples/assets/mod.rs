@@ -71,13 +71,13 @@ async fn main() {
 
     app.set_dir(static_dir);            // Set directory for static files
 
-    app.route("/", GET, home);          // Set the home route.
+    app.route(GET, "/", home);          // Set the home route.
     app.run("127.0.0.1", "8080").await; // Start the HTTP server (host, port).
 }
 "##;
 
     fs::write(path.join("main.rs"), content)
-        .expect("Failed to create src/main.rs for routes-project example");
+        .expect("Failed to create src/main.rs for assets example");
 }
 
 // assets/css/styles.css

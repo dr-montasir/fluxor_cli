@@ -162,13 +162,13 @@ pub fn about(_req: Req, _params: Params) -> Reply {
 async fn main() {
     let mut app = Fluxor::new();        // Initialize the application
 
-    app.route("/", GET, home);          // Set the home route
-    app.route("/about", GET, about);    // Set the about route
+    app.route(GET, "/", home);          // Set the home route
+    app.route(GET, "/about", about);    // Set the about route
 
     app.run("127.0.0.1", "8080").await; // Start the HTTP server with specified host and port
 }
 "##;
 
     fs::write(path.join("main.rs"), content)
-        .expect("Failed to create src/main.rs for routes-project example");
+        .expect("Failed to create src/main.rs for cans example");
 }
