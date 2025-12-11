@@ -34,7 +34,7 @@ fluxor = "{}"
 
 pub fn template_main_rs(path: &Path) {
     let content = r##"use fluxor::prelude::*;
-use fluxor::cans::html::*;
+use fluxor::cans::content::*;
 use fluxor::math::rand;
 
 pub const HEAD: &str = r#"<head>
