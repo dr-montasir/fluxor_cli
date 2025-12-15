@@ -109,11 +109,16 @@ path = "src/server.rs"
 pub fn hello_world_api_server_rs(path:  &Path) {
     fs::write(
         path.join("server.rs"),
-        r##"use fluxor::prelude::*;
+        r##"use fluxor::{cans::do_json, prelude::*};
 
 fn hello(_req: Req, _params: Params) -> Reply {
     boxed(async move {
-       let json_response = format!(r#"{{"message": "👋 Hello, World!"}}"#);
+       let json_response = do_json!(
+        r#"
+            {"message": "{{waving_hand_emoji}} Hello, World!"}
+        "#, 
+        waving_hand_emoji = "👋"
+    );
         
         Ok(Response::builder()
             .header("Content-Type", "application/json")
