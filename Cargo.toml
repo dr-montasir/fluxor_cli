@@ -1,6 +1,6 @@
 [package]
 name = "fluxor_cli"
-version = "0.9.4"
+version = "0.9.5"
 authors = ["Montasir Mirghani <me@montasir.site>"]
 edition = "2024"
 description = "Fluxor CLI: a command-line tool that allows developers to quickly and efficiently create project starters for the Fluxor web framework."

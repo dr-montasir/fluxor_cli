@@ -109,7 +109,7 @@ path = "src/server.rs"
 pub fn hello_world_api_server_rs(path:  &Path) {
     fs::write(
         path.join("server.rs"),
-        r##"use fluxor::{cans::do_json, prelude::*};
+        r##"use fluxor::prelude::*;
 
 fn hello(_req: Req, _params: Params) -> Reply {
     boxed(async move {

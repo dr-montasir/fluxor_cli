@@ -1,3 +1,11 @@
+## v0.9.5
+
+- Updated Fluxor Core Module:
+    - Added set_custom_404 function.
+    - Imported cans::content::* inside the prelude.
+- Updated README.md.
+- Examples updated.
+
 ## v0.9.4
 
 - Crates removed:
