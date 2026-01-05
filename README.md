@@ -102,6 +102,10 @@ The application should start on http://127.0.0.1:8080.
 ### Cans
 - cans-template-engine
 
+### Fluxor
+
+- fluxor-template
+
 Use the example name after the flag --example (e.g., `helloworld`):
 
 ```terminal
@@ -116,6 +120,8 @@ fluxor new assets_example --version latest --example assets
 fluxor new dotenv_example --version latest --example dotenv
 
 fluxor new template_app --version latest --example cans-template-engine
+
+fluxor new fluxor_template --version latest --example fluxor-template
 ```
 
 ## Documentation

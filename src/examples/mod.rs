@@ -4,3 +4,4 @@ pub mod assets;
 pub mod dotenv;
 pub mod cans;
 pub mod db;
+pub mod fluxor;

@@ -64,9 +64,18 @@ pub fn fetch_latest_version(crate_name: &str) -> Result<String, Box<dyn std::err
     Ok(version.to_string())
 }
 
+// Fetch dependencies crate version if "latest" is specified
+pub fn get_crate_version(version: &str, dep_crate_name: &str) -> String {
+    if version == "latest" {
+        fetch_latest_version(dep_crate_name).expect(&format!("Failed to fetch latest version of {}", dep_crate_name))
+    } else {
+        version.to_string()
+    }
+}
+
 pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
-    let crate_name = to_crate_name(name);
-    let project_path = Path::new(&crate_name);
+    let package_name = to_crate_name(name);
+    let project_path = Path::new(&package_name);
 
     // Check if project directory already exists
     if project_path.exists() {
@@ -85,24 +94,30 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
     };
 
     // create README.md
-    metadata::create_readme(project_path, &crate_name);
+    metadata::create_readme(project_path, &package_name);
 
     // Create Cargo.toml specific for the example
     let cargo_toml = match example {
         // Hello World Examples
-        "helloworld" => hello_world::hello_world_cargo_toml(&crate_name, &fluxor_version),
-        "helloworld-api" => hello_world::hello_world_cargo_toml(&crate_name, &fluxor_version),
-        "helloworld-api-server" => hello_world::hello_world_api_server_cargo_toml(&crate_name, &fluxor_version),
+        "helloworld" => hello_world::hello_world_cargo_toml(&package_name, &fluxor_version),
+        "helloworld-api" => hello_world::hello_world_cargo_toml(&package_name, &fluxor_version),
+        "helloworld-api-server" => hello_world::hello_world_api_server_cargo_toml(&package_name, &fluxor_version),
         // Routes Examples
-        "routes" => routes::routes_cargo_toml(&crate_name, &fluxor_version),
-        "routes-project" => routes::routes_cargo_toml(&crate_name, &fluxor_version),
+        "routes" => routes::routes_cargo_toml(&package_name, &fluxor_version),
+        "routes-project" => routes::routes_cargo_toml(&package_name, &fluxor_version),
         // Assets Examples
-        "assets" => assets::assets_cargo_toml(&crate_name, &fluxor_version),
+        "assets" => assets::assets_cargo_toml(&package_name, &fluxor_version),
         // DotEnv Examples
-        "dotenv" => dotenv::dotenv_cargo_toml(&crate_name, &fluxor_version),
-        "cans-template-engine" => cans::template_cargo_toml(&crate_name, &fluxor_version),
+        "dotenv" => dotenv::dotenv_cargo_toml(&package_name, &fluxor_version),
+        "cans-template-engine" => cans::template_cargo_toml(&package_name, &fluxor_version),
         // DB
-        "db-redis" => db::db_cargo_toml(&crate_name, &fluxor_version),
+        "db-redis" => db::db_cargo_toml(&package_name, &fluxor_version),
+        // Fluxor Full Template Example
+        "fluxor-template" => fluxor::fluxor_template_cargo_toml(
+            &package_name, 
+            &get_crate_version("latest", "crator"), 
+            &get_crate_version("latest", "fluxor")
+        ),
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
@@ -154,7 +169,7 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
 
             // src
             // src/main.rs
-            routes::routes_project_main_rs(&crate_name, &src_path);
+            routes::routes_project_main_rs(&package_name, &src_path);
             // src/lib.rs
             routes::routes_project_lib_rs(&src_path);
 
@@ -232,11 +247,61 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
             // main.rs
             db::db_redis_main_rs(&src_path);
         }
+        // Fluxor
+        // Full Fluxor Template Example
+        "fluxor-template" => {
+            // metadata files
+            fluxor::config_metadata(&project_path);
+
+            // src
+
+            // src/main.rs
+            fluxor::fluxor_template_main_rs(&package_name, &src_path);
+            // src/lib.rs
+            fluxor::fluxor_template_lib_rs(&src_path);
+
+            // Copy assets to src/assets directory
+            fluxor::fluxor_copy_folder(
+                "src/examples/fluxor/assets",
+                &src_path,
+                "assets"
+            );
+            // Copy components to src/components directory
+            fluxor::fluxor_copy_folder(
+                "src/examples/fluxor/components",
+                &src_path,
+                "components"
+            );
+            // Copy db to src/db directory
+            fluxor::fluxor_copy_folder(
+                "src/examples/fluxor/db",
+                &src_path,
+                "db"
+            );
+            // Copy helpers to src/helpers directory
+            fluxor::fluxor_copy_folder(
+                "src/examples/fluxor/helpers",
+                &src_path,
+                "helpers"
+            );
+            // Copy routes to src/routes directory
+            fluxor::fluxor_copy_folder(
+                "src/examples/fluxor/routes",
+                &src_path,
+                "routes"
+            );
+            // Copy validators to src/validators directory
+            fluxor::fluxor_copy_folder(
+                "src/examples/fluxor/validators",
+                &src_path,
+                "validators"
+            );
+        }
         _ => {
             eprintln!("Unknown example specified: {}", example);
             return;
         }
     }
 
-    println!("Fluxor project '{}' created successfully using the '{}' example.", crate_name, example);
+    println!("Fluxor project '{}' created successfully using the '{}' example.", package_name, example);
 }

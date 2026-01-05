@@ -14,7 +14,7 @@ pub fn config_metadata(path: &Path) {
 }
 
 pub fn hello_world_cargo_toml(name: &str, fluxor_version:  &str) -> String {
-    let crate_name = to_crate_name(name);
+    let package_name = to_crate_name(name);
     format!(
             r#"[package]
 name = "{}"
@@ -24,7 +24,7 @@ edition = "2024"
 [dependencies]
 fluxor = "{}"
 "#,
-            crate_name, fluxor_version // Using `name` here to set the package name
+            package_name, fluxor_version // Using `name` here to set the package name
         )
 }
 
@@ -86,7 +86,7 @@ async fn main() {
 }
 
 pub fn hello_world_api_server_cargo_toml(name: &str, fluxor_version:  &str) -> String {
-    let crate_name = to_crate_name(name);
+    let package_name = to_crate_name(name);
     format!(
             r#"[package]
 name = "{}"
@@ -100,7 +100,7 @@ fluxor = "{}"
 name = "server"
 path = "src/server.rs"
 "#,
-            crate_name, fluxor_version // Use `name` here to set the package name
+            package_name, fluxor_version // Use `name` here to set the package name
         )
 }
 

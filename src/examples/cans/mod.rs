@@ -16,7 +16,7 @@ pub fn config_metadata(path: &Path) {
 // Cargo.toml
 
 pub fn template_cargo_toml(name: &str, fluxor_version:  &str) -> String {
-    let crate_name = to_crate_name(name);
+    let package_name = to_crate_name(name);
     format!(
             r#"[package]
 name = "{}"
@@ -26,7 +26,7 @@ edition = "2024"
 [dependencies]
 fluxor = "{}"
 "#,
-            crate_name, fluxor_version
+            package_name, fluxor_version
         )
 }
 

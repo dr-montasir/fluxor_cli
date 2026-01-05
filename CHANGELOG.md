@@ -1,3 +1,18 @@
+## v1.0.0
+
+- Added cans crate.
+- Added Examples:
+    - fluxor (fluxor-template).
+- Updated Fluxor CLI Dependencies:
+    - clap (v4.5.48 => v4.5.54).
+    - regex (v1.11.3 => v1.12.2).
+- Updated Fluxor CLI:
+    - Added (lib) get_crate_version function.
+    - Added (utils) copy_folder_dir function.
+    - Added (metadata) create_license function.
+    - Updated README.md.
+    - Examples updated.
+
 ## v0.9.5
 
 - Updated Fluxor Core Module:
