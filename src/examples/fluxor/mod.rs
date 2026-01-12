@@ -4,8 +4,7 @@ use std::path::Path;
 use cans::do_replace;
 
 use crate::metadata::*;
-use crate::utils::{LICENSE_APACHE_CONTENT, LICENSE_MIT_CONTENT, to_crate_name};
-use crate::copy_folder_dir;
+use crate::utils::{LICENSE_APACHE_CONTENT, LICENSE_MIT_CONTENT, to_crate_name, copy_folder_dir};
 
 // metadata files
 
