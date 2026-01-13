@@ -1,3 +1,7 @@
+## v1.0.2
+
+- Updated fluxor_template
+
 ## v1.0.0
 
 - Added cans crate.

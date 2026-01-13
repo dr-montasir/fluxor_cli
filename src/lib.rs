@@ -250,6 +250,21 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
         // Fluxor
         // Full Fluxor Template Example
         "fluxor-template" => {
+            // paths
+            let assets_path = project_path.join("src/assets");
+            let assets_images_path = project_path.join("src/assets/images");
+            let assets_css_path = project_path.join("src/assets/css");
+            let assets_js_path = project_path.join("src/assets/js");
+            let components_path = project_path.join("src/components");
+            let components_scripts_path = project_path.join("src/components/scripts");
+            let db_path = project_path.join("src/db");
+            let helpers_path = project_path.join("src/helpers");
+            let routes_path = project_path.join("src/routes");
+            let routes_api_path = project_path.join("src/routes/api");
+            let routes_api_greeting_path = project_path.join("src/routes/api/greeting");
+            let routes_pages_path = project_path.join("src/routes/pages");
+            let validators_path = project_path.join("src/validators");
+
             // metadata files
             fluxor::config_metadata(&project_path);
 
@@ -260,42 +275,96 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
             // src/lib.rs
             fluxor::fluxor_template_lib_rs(&src_path);
 
-            // Copy assets to src/assets directory
-            fluxor::fluxor_copy_folder(
-                "src/examples/fluxor/assets",
-                &src_path,
-                "assets"
-            );
-            // Copy components to src/components directory
-            fluxor::fluxor_copy_folder(
-                "src/examples/fluxor/components",
-                &src_path,
-                "components"
-            );
-            // Copy db to src/db directory
-            fluxor::fluxor_copy_folder(
-                "src/examples/fluxor/db",
-                &src_path,
-                "db"
-            );
-            // Copy helpers to src/helpers directory
-            fluxor::fluxor_copy_folder(
-                "src/examples/fluxor/helpers",
-                &src_path,
-                "helpers"
-            );
-            // Copy routes to src/routes directory
-            fluxor::fluxor_copy_folder(
-                "src/examples/fluxor/routes",
-                &src_path,
-                "routes"
-            );
-            // Copy validators to src/validators directory
-            fluxor::fluxor_copy_folder(
-                "src/examples/fluxor/validators",
-                &src_path,
-                "validators"
-            );
+            // src/assets
+
+            // src/assets/images
+            fs::create_dir_all(assets_path.join("images")).expect("Failed to create assets/images directory");
+            // src/assets/css
+            fs::create_dir_all(assets_path.join("css")).expect("Failed to create assets/css directory");
+            // src/assets/js
+            fs::create_dir_all(assets_path.join("js")).expect("Failed to create assets/js directory");
+
+            // src/assets/manifest.json
+            fluxor::assets_manifest_json(&assets_path);
+            // src/assets/service-worker.js
+            fluxor::assets_service_worker_js(&assets_path);
+            // src/assets/images/logo.svg
+            fluxor::assets_images_logo_svg(&assets_images_path);
+            // src/assets/css/styles.css
+            fluxor::assets_css_styles_css(&assets_css_path);
+            // src/assets/js/alpine.min.js
+            fluxor::assets_js_alpine_min_js(&assets_js_path);
+
+            // src/components
+
+            // src/components/scripts
+            fs::create_dir_all(components_path.join("scripts")).expect("Failed to create components/scripts directory");
+
+            // src/components/scripts/mod.rs
+            fluxor::components_scripts_mod_rs(&components_scripts_path);
+            // src/components/scripts/sw_register.rs
+            fluxor::components_scripts_sw_register_rs(&components_scripts_path);
+            // src/components/badge.rs
+            fluxor::components_badge_rs(&components_path);
+            // src/components/footer.rs
+            fluxor::components_footer_rs(&components_path);
+            // src/components/head.rs
+            fluxor::components_head_rs(&components_path);
+            // src/components/header.rs
+            fluxor::components_header_rs(&components_path);
+            // src/components/layout.rs
+            fluxor::components_layout_rs(&components_path);
+            // src/components/logo.rs
+            fluxor::components_logo_rs(&components_path);
+            // src/components/mod.rs
+            fluxor::components_mod_rs(&components_path);
+            // src/components/nav.rs
+            fluxor::components_nav_rs(&components_path);
+            // src/components/notfound.rs
+            fluxor::components_notfound_rs(&components_path);
+
+            // src/db
+
+            fs::create_dir_all(&db_path).expect("Failed to create src/db directory");
+
+            // src/db/mod.rs
+            fluxor::db_mod_rs(&db_path);
+
+            // src/helpers
+
+            fs::create_dir_all(&helpers_path).expect("Failed to create src/helpers directory");
+
+            // src/helpers/mod.rs
+            fluxor::helpers_mod_rs(&helpers_path);
+
+            // src/routes
+
+            fs::create_dir_all(&routes_path).expect("Failed to create src/routes directory");
+            
+            // src/routes/pages
+            fs::create_dir_all(routes_path.join("pages")).expect("Failed to create routes/pages directory");
+            // src/routes/api
+            fs::create_dir_all(routes_path.join("api")).expect("Failed to create routes/api directory");
+            // src/routes/api/greeting
+            fs::create_dir_all(routes_path.join("api/greeting")).expect("Failed to create routes/api/greeting directory");
+
+            // src/routes/mod.rs
+            fluxor::routes_mod_rs(&routes_path);
+            // src/routes/api/mod.rs
+            fluxor::routes_api_mod_rs(&routes_api_path);
+            // src/routes/api/greeting/mod.rs
+            fluxor::routes_api_greeting_mod_rs(&routes_api_greeting_path);
+            // src/routes/pages/mod.rs
+            fluxor::routes_pages_mod_rs(&routes_pages_path);
+            // src/routes/pages/home.rs
+            fluxor::routes_pages_home_rs(&routes_pages_path);
+            
+            // src/validators
+
+            fs::create_dir_all(&validators_path).expect("Failed to create src/validators directory");
+
+            // src/validators/mod.rs
+            fluxor::validators_mod_rs(&validators_path);
         }
         _ => {
             eprintln!("Unknown example specified: {}", example);
