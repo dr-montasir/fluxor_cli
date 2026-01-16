@@ -258,6 +258,7 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
             let components_path = project_path.join("src/components");
             let components_scripts_path = project_path.join("src/components/scripts");
             let db_path = project_path.join("src/db");
+            let ds_path = project_path.join("src/ds");
             let helpers_path = project_path.join("src/helpers");
             let routes_path = project_path.join("src/routes");
             let routes_api_path = project_path.join("src/routes/api");
@@ -330,6 +331,13 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
             // src/db/mod.rs
             fluxor::db_mod_rs(&db_path);
 
+            // src/ds
+
+            fs::create_dir_all(&ds_path).expect("Failed to create src/ds directory");
+
+            // src/ds/mod.rs
+            fluxor::ds_mod_rs(&ds_path);
+
             // src/helpers
 
             fs::create_dir_all(&helpers_path).expect("Failed to create src/helpers directory");
@@ -358,6 +366,8 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
             fluxor::routes_pages_mod_rs(&routes_pages_path);
             // src/routes/pages/home.rs
             fluxor::routes_pages_home_rs(&routes_pages_path);
+            // src/routes/pages/analytics.rs
+            fluxor::routes_pages_analytics_rs(&routes_pages_path);
             
             // src/validators
 

@@ -14,7 +14,8 @@ pub fn config_metadata(path: &Path) {
 /target
 
 # Files
-Cargo.lock"#;
+Cargo.lock
+"#;
     create_gitignore(path, gitignore_content);
 
   let env_content = r#"# here env.."#;
@@ -84,12 +85,14 @@ pub fn fluxor_template_lib_rs(path: &Path) {
     let content = r#"pub mod components;
 pub mod routes;
 // pub mod db;
+// pub mod ds;
 // pub mod helpers;
 // pub mod validators;
 
 pub use components::*;
 pub use routes::*;
 // pub use db::*;
+// pub use ds::*;
 // pub use helpers::*;
 // pub use validators::*;"#;
 
@@ -161,10 +164,10 @@ self.addEventListener('notificationclick', function (event) {
 // src/assets/images/logo.svg
 pub fn assets_images_logo_svg(path: &Path) {
     let content = r##"<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M32.4712 56.0684L24.0436 47.6408L47.6408 24.0436C52.2952 28.698 52.2952 36.2443 47.6408 40.8987L32.4712 56.0684Z" fill="#61DAFB"/>
-<path d="M32.2667 35.6129L22.1536 45.726L18.7826 42.3549L28.8957 32.2418L32.2667 35.6129Z" fill="#FF6D00"/>
-<path d="M32.0023 8.40495L40.4299 16.8325L16.8327 40.4298C12.1782 35.7753 12.1782 28.229 16.8327 23.5746L32.0023 8.40495Z" fill="#FF6D00"/>
-<path d="M32.2419 28.8955L42.355 18.7824L45.726 22.1534L35.6129 32.2665L32.2419 28.8955Z" fill="#61DAFB"/>
+    <path d="M32.4712 56.0684L24.0436 47.6408L47.6408 24.0436C52.2952 28.698 52.2952 36.2443 47.6408 40.8987L32.4712 56.0684Z" fill="#61DAFB"/>
+    <path d="M32.2667 35.6129L22.1536 45.726L18.7826 42.3549L28.8957 32.2418L32.2667 35.6129Z" fill="#FF6D00"/>
+    <path d="M32.0023 8.40495L40.4299 16.8325L16.8327 40.4298C12.1782 35.7753 12.1782 28.229 16.8327 23.5746L32.0023 8.40495Z" fill="#FF6D00"/>
+    <path d="M32.2419 28.8955L42.355 18.7824L45.726 22.1534L35.6129 32.2665L32.2419 28.8955Z" fill="#61DAFB"/>
 </svg>"##;
 
     fs::write(path.join("logo.svg"), content)
@@ -358,9 +361,20 @@ body {
   }
 }
 
-/* Hero Block */
 .hero {
-    padding: 4rem 0 2rem;
+   padding: 4rem 0 2rem; 
+}
+
+.analytics {
+    padding: 2rem 0 2rem;
+}
+
+.analytics h1 {
+    margin-top: 0;
+}
+
+/* Hero and Analytics Blocks */
+.hero, .analytics {
     text-align: center;
     background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
     background-size: 20px 20px;
@@ -399,6 +413,75 @@ body {
     .hero__actions {
         flex-direction: row;
     }
+}
+
+.analytics p {
+  padding-left: 200px;
+  padding-right: 200px;
+}
+
+.analytics__chart-container {
+  width: 75%;
+  margin: 0 auto;
+  padding-left: 150px;
+  padding-right: 150px;
+}
+
+@media(max-width: 768px) {
+  .analytics__chart-container {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .analytics__table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .analytics p {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.analytics__table-wrapper {
+  width: 100%;
+  overflow-x: auto; 
+  display: block;
+}
+
+.analytics__table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  background-color: #fff; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.analytics__table thead {
+  background-color: #f1f5f9;
+}
+
+.analytics__table th {
+  padding: 12px 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.analytics__table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.analytics__table td {
+  padding: 12px 15px;
+  text-align: center;
+}
+
+.analytics__table tbody tr:hover {
+  background-color: #f0f4f8;
 }
 
 /* Button Block */
@@ -599,6 +682,71 @@ body {
   font-weight: bold;
   margin: 1.5rem 0 2rem 0;
   color: var(--color-text-muted);
+}
+
+.loadingscreen__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+ * Instructions for customizing the loading screen:
+ * 
+ * 1. To use the default spinner instead of the Fluxor logo:
+ *    - Uncommit (disable/remove) the existing spinner styles.
+ *    - Commit (add) the Fluxor logo styles or assets below.
+ * 
+ * 2. In the layout component:
+ *    - Remove the SVG logo placeholder:
+ *      <div class="loadingscreen__spinner">{{LOGO}}</div>
+ *    - Replace it with an empty spinner container:
+ *      <div class="loadingscreen__spinner"></div>
+ */
+
+/* Uncomment this block to use the default spinner instead of Fluxor logo
+.loadingscreen__spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} */
+
+/*
+ * Styles for Fluxor logo spinner
+ */
+
+.loadingscreen__spinner {
+  backface-visibility: hidden;
+}
+
+.loadingscreen__spinner svg {
+  animation: spinY 1.25s linear infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes spinY {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
 }"##;
 
     fs::write(path.join("styles.css"), content)
@@ -690,16 +838,16 @@ pub fn components_scripts_sw_register_rs(path: &Path) {
 
         document.getElementById('install-btn').addEventListener('click', () => {
             if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-                } else {
-                console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-                document.getElementById('install-btn').style.display = 'none';
-            });
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('install-btn').style.display = 'none';
+                });
             }
         });
         </script>"#;"##;
@@ -770,20 +918,20 @@ const HEAD: &str = r#"<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="{{description}}" />
     <meta name="keywords" content="{{keywords}}" />
+    <title>{{page_title}}</title>
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/images/logo.svg" type="image/svg+xml" />
-    <title>{{page_title}}</title>
-    <link href="fonts.googleapis.com" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
-    <script defer src="/js/alpine.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    {{sources}}
 </head>"#;
 
-pub fn head(title: &str, description: &str, keywords: &str) -> String {
+pub fn head(title: &str, description: &str, keywords: &str, sources: &str) -> String {
     do_html!(
         HEAD,
         description=description,
         keywords=keywords,
-        page_title=title
+        page_title=title,
+        sources=sources
     )
 }"##;
 
@@ -798,9 +946,9 @@ use crate::components::{logo::logo, nav::{DESKTOP_NAV, MOBILE_NAV}};
 
 const HEADER: &str = r##"<header class="header">
                 <div class="container header__inner">
-                    <a href="/" class="header__logo">
-                        {{LOGO}}
-                        <span style="margin-left: 0.5rem">Fluxor</span>
+                    <a href="/" class="spinner-on-click header__logo">
+                    {{LOGO}}
+                    <span style="margin-left: 0.5rem">Fluxor</span>
                     </a>
 
                     <!-- Desktop Nav -->
@@ -837,10 +985,37 @@ use fluxor::wtime;
 use crate::components::*;
 
 pub const LAYOUT_TEMPLATE: &str = r###"<!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="{ isLoading: false }" 
+    x-init="
+        isLoading = false;
+        // Add event listeners to all <a> elements with the class 'spinner-on-click'
+        document.querySelectorAll('a.spinner-on-click').forEach(link => {
+            link.addEventListener('click', () => {
+                isLoading = true; // Show spinner on click
+            });
+        });
+
+        // When page loads, hide spinner
+        document.addEventListener('DOMContentLoaded', () => {
+            isLoading = false;
+        });
+    "
+>
     <!-- head -->
     {{HEAD}}
     <body>
+        <!-- Loading overlay -->
+        <div 
+            x-show="isLoading" 
+            class="loadingscreen__overlay" 
+            x-transition
+        >
+            <div class="loadingscreen__spinner">
+                {{LOGO}}
+            </div>
+            
+        </div>
+
         <!-- main container -->
         <div x-data="{ mobileMenu: false }">
             <!-- header -->
@@ -859,12 +1034,13 @@ pub const LAYOUT_TEMPLATE: &str = r###"<!DOCTYPE html>
     </body>
 </html>"###;
 
-pub fn layout(title: &str, description: &str, keywords: &str, main_content: &str) -> String {
+pub fn layout(title: &str, description: &str, keywords: &str, sources: &str, main_content: &str) -> String {
     let year = wtime::local::get_local_year();
 
     do_html!(
         LAYOUT_TEMPLATE,
-        HEAD = head(title, description, keywords),
+        HEAD = head(title, description, keywords, sources),
+        LOGO = logo::logo("96", "96"),
         HEADER = header(),
         MAIN_CONTENT=main_content,
         FOOTER=footer(year),
@@ -923,17 +1099,44 @@ pub use notfound::not_found_page;"#;
 // src/components/nav.rs
 pub fn components_nav_rs(path: &Path) {
     let content = r###"pub const DESKTOP_NAV: &str = r##"<nav class="header__nav">
+                        <a 
+                            href="/" 
+                            class="spinner-on-click header__link"
+                            x-data="{ show: false }"
+                            x-init="show = (window.location.pathname !== '/')"
+                            x-show="show"
+                        >
+                            Home
+                        </a>
+                        <a href="/analytics" class="spinner-on-click header__link">Analytics</a>
                         <a href="https://docs.rs/fluxor/latest/fluxor" class="header__link" target="_blank">Docs</a>
-                        <a href="https://crates.io/crates/fluxor_cli" class="header__link" target="_blank">Examples</a>
                         <a href="https://github.com/dr-montasir/fluxor" class="header__link" target="_blank">GitHub</a>
-                        <a href="#get-started" class="header__link header__link--button">Get Started</a>
+                        <a 
+                            href="#get-started" 
+                            class="header__link header__link--button"
+                            x-data="{ show: false }" 
+                            x-init="show = (window.location.pathname === '/')"
+                            x-show="show"
+                        >
+                            Get Started
+                        </a>
                     </nav>"##;
 
 pub const MOBILE_NAV: &str = r##"<div class="header__mobile-nav" x-show="mobileMenu" x-cloak x-transition x-on:click.away="mobileMenu = false">
+                    <a href="/" class="spinner-on-click header__link">Home</a>
+                    <a href="/analytics" class="spinner-on-click header__link">Analytics</a>
                     <a href="https://docs.rs/fluxor/latest/fluxor" class="header__link" target="_blank">Docs</a>
-                    <a href="https://crates.io/crates/fluxor_cli" class="header__link" target="_blank">Examples</a>
                     <a href="https://github.com/dr-montasir/fluxor" class="header__link" target="_blank">GitHub</a>
-                    <a href="#get-started" class="header__link header__link--button" style="text-align: center;">Get Started</a>
+                    <a 
+                        href="#get-started" 
+                        class="header__link header__link--button" 
+                        style="text-align: center;"
+                        x-data="{ show: false }" 
+                        x-init="show = (window.location.pathname === '/')"
+                        x-show="show"
+                    >
+                        Get Started
+                    </a>
                 </div>"##;"###;
 
     fs::write(path.join("nav.rs"), content)
@@ -942,7 +1145,8 @@ pub const MOBILE_NAV: &str = r##"<div class="header__mobile-nav" x-show="mobileM
 
 // src/components/notfound.rs
 pub fn components_notfound_rs(path: &Path) {
-    let content = r###"use crate::components::*;
+    let content = r###"use fluxor::cans::content::do_html;
+use crate::components::*;
 
 const NOT_FOUND_HTML: &str = r##"<div class="error404">
                 <h1 class="error404__title">
@@ -974,11 +1178,13 @@ const NOT_FOUND_HTML: &str = r##"<div class="error404">
 
 
 pub fn not_found_page () -> String {
-  return layout("404 Not Found", 
-    "Fluxor is a versatile Rust web framework designed for data science and computing science applications.", 
-    "async, data-science, fluxor, framework, web", 
-    NOT_FOUND_HTML
-  );
+    return layout("404 Not Found", 
+        "Fluxor is a versatile Rust web framework designed for data science and computing science applications.", 
+        "async, data-science, fluxor, framework, web", 
+        &do_html!(r##"<link rel="stylesheet" href="/css/styles.css">
+        <script defer src="/js/alpine.min.js"></script>"##,),
+        NOT_FOUND_HTML
+    );
 }"###;
 
     fs::write(path.join("notfound.rs"), content)
@@ -993,6 +1199,16 @@ pub fn db_mod_rs(path: &Path) {
 
     fs::write(path.join("mod.rs"), content)
         .expect("Failed to create src/db/mod.rs for fluxor-template example");
+}
+
+// src/ds
+
+// src/ds/mod.rs
+pub fn ds_mod_rs(path: &Path) {
+    let content = r#"// data science and computing applications here.."#;
+
+    fs::write(path.join("mod.rs"), content)
+        .expect("Failed to create src/ds/mod.rs for fluxor-template example");
 }
 
 // src/helpers
@@ -1014,7 +1230,7 @@ pub fn routes_mod_rs(path: &Path) {
 mod api;
 mod pages;
 
-use pages::home_page;
+use pages::{home_page, analytics_page};
 use api::hello_world;
 
 pub fn setup_routes(app: &mut Fluxor) {
@@ -1022,7 +1238,8 @@ pub fn setup_routes(app: &mut Fluxor) {
     app.route(POST, "/api/greeting/hello", hello_world);  // Set the hello_world route.
     
     // pages
-    app.route(GET, "/", home_page);  // Set the home route.
+    app.route(GET, "/", home_page);                 // Set the home route.
+    app.route(GET, "/analytics", analytics_page);   // Set the analytics route.
 
     // client
     app.route(GET, "/http-client", serve_http_client);
@@ -1069,10 +1286,10 @@ pub fn hello_world(_req: Req, _params: Params) -> Reply {
 // src/routes/pages/mod.rs
 pub fn routes_pages_mod_rs(path: &Path) {
     let content = r#"mod home;
-// mod analytics;
+mod analytics;
 
 pub use home::home_page;
-// pub use analytics::analytics_page;"#;
+pub use analytics::analytics_page;"#;
 
     fs::write(path.join("mod.rs"), content)
         .expect("Failed to create src/routes/pages/mod.rs for fluxor-template example");
@@ -1161,30 +1378,255 @@ const MAIN_HOME_CONTENT: &str = r####"<!-- Hero Block -->
                 </div>
             </section>"####;
 
+const SOURCES: &str = r##"<link rel="stylesheet" href="/css/styles.css">
+    <script defer src="/js/alpine.min.js"></script>"##;
 
 pub fn home_page(_req: Req, _params: Params) -> Reply {
-  boxed(async move {
-    // Await the badge function
-    let badge_html = crate::components::badge("fluxor").await;
+    boxed(async move {
+        // Await the badge function
+        let badge_html = crate::components::badge("fluxor").await;
 
-    // Generate the content with the badge
-    let content = layout(
-      "Fluxor", 
-      "Fluxor is a versatile Rust web framework designed for data science and computing science applications.",
-      "async, data-science, fluxor, framework, web",
-      &do_json!(MAIN_HOME_CONTENT, BADGE = badge_html)
-    );
+        // Generate the content with the badge
+        let content = layout(
+            "Fluxor", 
+            "Fluxor is a versatile Rust web framework designed for data science and computing science applications.",
+            "async, data-science, fluxor, framework, web",
+            &do_html!(SOURCES,),
+            &do_html!(MAIN_HOME_CONTENT, BADGE = badge_html)
+        );
 
-    // Return the HTTP response
-    Ok(Response::builder()
-      .header("Content-Type", "text/html; charset=UTF-8")
-      .body(Body::from(content))
-      .unwrap())
-  })
+        // Return the HTTP response
+        Ok(Response::builder()
+            .header("Content-Type", "text/html; charset=UTF-8")
+            .body(Body::from(content))
+            .unwrap())
+    })
 }"#####;
 
     fs::write(path.join("home.rs"), content)
         .expect("Failed to create src/routes/pages/home.rs for fluxor-template example");
+}
+
+// src/routes/pages/analytics.rs
+pub fn routes_pages_analytics_rs(path: &Path) {
+    let content = r#####"use fluxor::prelude::*;
+
+use crate::components::*;
+
+use crator::crate_data;
+
+const MAIN_ANALYTICS_CONTENT: &str = r####"<!-- Analytics Block -->
+            <section class="analytics">
+                <h1>Analytics Page</h1>
+                <p>
+                    Fluxor and its dependencies are fundamental to this ecosystem, empowering developers to efficiently reuse and share robust components. This promotes consistency, enhances security, and accelerates development, making the framework a reliable foundation for building scalable and maintainable applications.
+                </p>
+
+                <h2>Crates Total Downloads</h2>
+                <div class="analytics__chart-container">
+                    <canvas id="downloadsChart" width="800" height="400"></canvas>
+                </div>
+
+                <h3>Crates Information</h3>
+                <div>
+                    <div class="analytics__table-wrapper">
+                        <table class="analytics__table">
+                        <thead>
+                            <tr>
+                                <th>Crate</th>
+                                <th>Downloads</th>
+                                <th>Latest</th>
+                                <th>License</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>cans</td>
+                                <td>{{cans_total_downloads}}</td>
+                                <td>v{{cans_latest}}</td>
+                                <td>{{cans_license}}</td>
+                            </tr>
+                            <tr>
+                                <td>fluxor</td>
+                                <td>{{fluxor_total_downloads}}</td>
+                                <td>v{{fluxor_latest}}</td>
+                                <td>{{fluxor_license}}</td>
+                            </tr>
+                            <tr>
+                                <td>mathlab</td>
+                                <td>{{mathlab_total_downloads}}</td>
+                                <td>v{{mathlab_latest}}</td>
+                                <td>{{mathlab_license}}</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <script>
+                    const cratesData = [
+                    {
+                        crate: "cans",
+                        url: "https://crates.io/crates/cans",
+                        downloads: {{cans_total_downloads}},
+                        latest_version: "{{cans_latest}}",
+                        license: "{{cans_license}}"
+                    },
+                    {
+                        crate: "fluxor",
+                        url: "https://crates.io/crates/fluxor",
+                        downloads: {{fluxor_total_downloads}},
+                        latest_version: "{{fluxor_latest}}",
+                        license: "{{fluxor_license}}"
+                    },
+                    {
+                        crate: "mathlab",
+                        url: "https://crates.io/crates/mathlab",
+                        downloads: {{mathlab_total_downloads}},
+                        latest_version: "{{mathlab_latest}}",
+                        license: "{{mathlab_license}}"
+                    }
+                    ];
+
+                    const ctx = document.getElementById('downloadsChart').getContext('2d');
+
+                    const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: cratesData.map(c => c.crate),
+                        datasets: [{
+                        label: 'Crates Total Downloads',
+                        data: cratesData.map(c => c.downloads),
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        onClick: (evt, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const crateInfo = cratesData[index];
+                            window.open(crateInfo.url, '_blank');
+                        }
+                        },
+                        plugins: {
+                            datalabels: {
+                                    anchor: 'end',
+                                    align: 'top',
+                                    formatter: (value, context) => {
+                                    const index = context.dataIndex;
+                                    return cratesData[index].downloads.toLocaleString(); // show number
+                                },
+                                font: { size: 14, weight: 'bold' },
+                                color: 'black'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                label: function(context) {
+                                    const index = context.dataIndex;
+                                    const crate = cratesData[index];
+                                    return [
+                                    `Crate: ${crate.crate}`,
+                                    `Version: ${crate.latest_version}`,
+                                    `License: ${crate.license}`,
+                                    `Link: ${crate.url}`
+                                    ];
+                                }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Crates Total Downloads'
+                            }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    min: 0,
+                                    ticks: {
+                                    callback: function(value) {
+                                        if (value === 0) return 0;
+                                        if (value < 100) return value;
+                                        return value.toLocaleString();
+                                    }
+                                    }
+                                }
+                            }
+                        },
+                        plugins: [ChartDataLabels]
+                    });
+
+                    // Detect clicks near the number labels to open links
+                    document.getElementById('downloadsChart').addEventListener('click', function(evt) {
+                    const points = chart.getElementsAtEventForMode(evt, 'nearest', { intersect: false }, false);
+                    if (points.length) {
+                        const index = points[0].index;
+                        const crateInfo = cratesData[index];
+
+                        // Get position of the clicked point
+                        const meta = chart.getDatasetMeta(0);
+                        const bar = meta.data[index];
+
+                        // Get click position relative to canvas
+                        const rect = chart.canvas.getBoundingClientRect();
+                        const clickX = evt.clientX - rect.left;
+                        const clickY = evt.clientY - rect.top;
+
+                        // The number is rendered above the bar, roughly 15-20 px above bar.y
+                        const labelYPosition = bar.y - 20;
+                        const labelXPosition = bar.x;
+
+                        // Check if click is near the label
+                        if (
+                        Math.abs(clickX - labelXPosition) < 30 && // horizontal range
+                        clickY < bar.y && clickY > labelYPosition // vertical range
+                        ) {
+                        window.open(crateInfo.url, '_blank');
+                        }
+                    }
+                    });
+                </script>
+            </section>"####;
+
+const SOURCES: &str = r##"<link rel="stylesheet" href="/css/styles.css">
+    <script defer src="/js/alpine.min.js"></script>
+    {{chartjs}}
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>"##;
+
+pub fn analytics_page(_req: Req, _params: Params) -> Reply {
+    boxed(async move {
+        let cans_info = crate_data("cans").await.expect("Failed to fetch cans data");
+        let fluxor_info = crate_data("fluxor").await.expect("Failed to fetch fluxor data");
+        let mathlab_info = crate_data("mathlab").await.expect("Failed to fetch mathlab data");
+
+        let content = layout(
+            "Fluxor — analytics page",
+            "Fluxor is a versatile Rust web framework designed for data science and computing science applications.",
+            "async, data-science, fluxor, framework, web, analytics",
+            &do_html!(SOURCES, chartjs = chart_js("4.5.1")),
+            &do_html!(
+                MAIN_ANALYTICS_CONTENT,
+                cans_total_downloads = cans_info.total_downloads,
+                cans_latest = &cans_info.latest,
+                cans_license = &cans_info.license,
+                fluxor_total_downloads = fluxor_info.total_downloads,
+                fluxor_latest = &fluxor_info.latest,
+                fluxor_license = &fluxor_info.license,
+                mathlab_total_downloads = mathlab_info.total_downloads,
+                mathlab_latest = &mathlab_info.latest,
+                mathlab_license = &mathlab_info.license
+            )
+        );
+
+        Ok(Response::builder()
+            .header("Content-Type", "text/html; charset=UTF-8")
+            .body(Body::from(content))
+            .unwrap())
+    })
+}"#####;
+
+    fs::write(path.join("analytics.rs"), content)
+        .expect("Failed to create src/routes/pages/analytics.rs for fluxor-template example");
 }
 
 // src/validators

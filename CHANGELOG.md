@@ -1,3 +1,12 @@
+## v1.1.0
+
+- Crates updated:
+    - cans (v1.3.0 => v1.5.0).
+- Updated fluxor_template:
+    - Added analytics page.
+    - Added ds module.
+    - Improved styles.
+
 ## v1.0.2
 
 - Updated fluxor_template
