@@ -138,9 +138,11 @@ mod api;
 
 // Define the function to set up routes
 pub fn setup_routes(app: &mut Fluxor) {
-    app.route(GET, "/", pages::home::home);             // Set the home route.
-    app.route(GET, "/about", pages::about::about);      // Set the about route.
-    app.route(POST, "/api/msg", api::msg::api_message); // Set the api message route.
+    app.route(GET, "/", pages::home::home);             // Home route
+    app.route(GET, "/about", pages::about::about);      // About route.
+    app.route(POST, "/api/msg", api::msg::api_message); // The api message route.
+    app.route(GET, "/api/req/<id>", api::dynamic_route::dynamic_route_by_request);      // Request approach
+    app.route(GET, "/api/params/<id>", api::dynamic_route::dynamic_route_by_params);    // Params approach
     app.route(GET, "/http-client", serve_http_client);  // A simple http client to test your application.
 }"#;
 
@@ -151,7 +153,8 @@ pub fn setup_routes(app: &mut Fluxor) {
 // src/routes/api/mod.rs
 
 pub fn routes_project_routes_api_mod_rs(path: &Path) {
-    let content = r#"pub mod msg;"#;
+    let content = r#"pub mod msg;
+pub mod dynamic_route;"#;
 
     fs::write(path.join("mod.rs"), content)
         .expect("Failed to create src/routes/api/mod.rs for routes-project example");
@@ -176,6 +179,62 @@ pub fn api_message(_req: Req, _params: Params) -> Reply {
 
     fs::write(path.join("msg.rs"), content)
         .expect("Failed to create src/routes/api/msg.rs for routes-project example");
+}
+
+// src/routes/api/dynamic_route.rs
+
+pub fn routes_project_routes_api_dynamic_route_rs(path: &Path) {
+    let content = r###"use fluxor::prelude::*;
+
+const JSON_TEMPLATE: &str = r##"{
+  "id": "{{dynamic_id}}",
+  "dynamic_route": "by_{{approach}}",
+  "message": "The id value was retrieved using the {{approach}} approach."
+}"##;
+
+pub fn dynamic_route_by_request(req: Req, _params: Params) -> Reply {
+    // app.route(GET, "/api/req/<id>", dynamic_route_by_request);
+    // Clone the path string
+    let path = req.uri().path().to_string();
+
+    boxed(async move {
+        // Use the cloned string inside async block
+        let id_value = path.trim_start_matches("/api/req/");
+        
+        let json_response = do_json!(
+            JSON_TEMPLATE,
+            dynamic_id = id_value,
+            approach = "request"
+        );
+
+        Ok(Response::builder()
+            .header("Content-Type", "application/json")
+            .body(Body::from(json_response))
+            .unwrap())
+    })
+}
+
+pub fn dynamic_route_by_params(_req: Req, params: Params) -> Reply {
+    // app.route(GET, "/api/params/<id>", dynamic_route_by_params);
+    // Retrieve the "id" parameter from params.extra
+    let id_value = params.extra.get("id").cloned().unwrap_or_default();
+
+    boxed(async move {
+        let json_response = do_json!(
+            JSON_TEMPLATE,
+            dynamic_id = &id_value,
+            approach = "params"
+        );
+
+        Ok(Response::builder()
+            .header("Content-Type", "application/json")
+            .body(Body::from(json_response))
+            .unwrap())
+    })
+}"###;
+
+    fs::write(path.join("dynamic_route.rs"), content)
+        .expect("Failed to create src/routes/api/dynamic_route.rs for routes-project example");
 }
 
 // src/routes/pages/mod.rs

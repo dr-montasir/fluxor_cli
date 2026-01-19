@@ -33,8 +33,7 @@ fluxor = "{}"
 // main.rs
 
 pub fn template_main_rs(path: &Path) {
-    let content = r##"use fluxor::prelude::*;
-use fluxor::cans::content::*;
+    let content = r###"use fluxor::prelude::*;
 use fluxor::math::rand;
 
 pub const HEAD: &str = r#"<head>
@@ -158,16 +157,64 @@ pub fn about(_req: Req, _params: Params) -> Reply {
     })
 }
 
+const JSON_TEMPLATE: &str = r##"{
+  "id": "{{dynamic_id}}",
+  "dynamic_route": "by_{{approach}}",
+  "message": "The id value was retrieved using the {{approach}} approach."
+}"##;
+
+pub fn dynamic_route_by_request(req: Req, _params: Params) -> Reply {
+    // app.route(GET, "/api/req/<id>", dynamic_route_by_request);
+    // Clone the path string
+    let path = req.uri().path().to_string();
+
+    boxed(async move {
+        // Use the cloned string inside async block
+        let id_value = path.trim_start_matches("/api/req/");
+        
+        let json_response = do_json!(
+            JSON_TEMPLATE,
+            dynamic_id = id_value,
+            approach = "request"
+        );
+
+        Ok(Response::builder()
+            .header("Content-Type", "application/json")
+            .body(Body::from(json_response))
+            .unwrap())
+    })
+}
+
+pub fn dynamic_route_by_params(_req: Req, params: Params) -> Reply {
+    // app.route(GET, "/api/params/<id>", dynamic_route_by_params);
+    // Retrieve the "id" parameter from params.extra
+    let id_value = params.extra.get("id").cloned().unwrap_or_default();
+
+    boxed(async move {
+        let json_response = do_json!(
+            JSON_TEMPLATE,
+            dynamic_id = &id_value,
+            approach = "params"
+        );
+
+        Ok(Response::builder()
+            .header("Content-Type", "application/json")
+            .body(Body::from(json_response))
+            .unwrap())
+    })
+}
+
 #[tokio::main]
 async fn main() {
     let mut app = Fluxor::new();        // Initialize the application
 
-    app.route(GET, "/", home);          // Set the home route
-    app.route(GET, "/about", about);    // Set the about route
+    app.route(GET, "/", home);          // Home route
+    app.route(GET, "/about", about);    // About route
+    app.route(GET, "/api/req/<id>", dynamic_route_by_request);      // Request approach
+    app.route(GET, "/api/params/<id>", dynamic_route_by_params);    // Params approach
 
-    app.run("127.0.0.1", "8080").await; // Start the HTTP server with specified host and port
-}
-"##;
+    app.run("127.0.0.1", "8080").await; // Start server
+}"###;
 
     fs::write(path.join("main.rs"), content)
         .expect("Failed to create src/main.rs for cans example");

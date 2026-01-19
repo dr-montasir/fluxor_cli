@@ -188,6 +188,8 @@ pub fn create_fluxor_web_project(name: &str, version: &str, example: &str) {
             routes::routes_project_routes_api_mod_rs(&src_routes_api_path);
             // src/routes/api/msg.rs
             routes::routes_project_routes_api_msg_rs(&src_routes_api_path);
+            // src/routes/api/dynamic_route.rs
+            routes::routes_project_routes_api_dynamic_route_rs(&src_routes_api_path);
 
             // src/routes/pages
             // Create routes/pages directory under the src folder
